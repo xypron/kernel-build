@@ -1,5 +1,7 @@
 TAG=4.18.20
 
+NPROC=${shell nproc}
+
 MK_ARCH="${shell uname -m}"
 ifneq ("armv7l", $(MK_ARCH))
 	export ARCH=arm
@@ -31,7 +33,7 @@ build:
 	cd linux && make distclean
 	cp config/config-$(TAG) linux/.config
 	cd linux && make oldconfig
-	cd linux && make bindeb-pkg
+	cd linux && make bindeb-pkg -j$(NPROC)
 
 install:
 	dpkg -i linux-image-$(TAG)-armmp-lpae_$(TAG)-armmp-lpae-*_armhf.deb	
